@@ -53,17 +53,22 @@ var StickyHeaders = (function() {
   }
 
   StickyHeaders.prototype._createHeaderContainer = function() {
-    var headerWrap = document.createElement('div');
-    headerWrap.className = 'list-header-sticky';
+    var header = document.createElement('div');
+    header.className = 'list-header-sticky';
+
+    var headerWrap  = document.createElement('div');
+    headerWrap.className = 'list-header-sticky-wrap';
+    headerWrap.style.right = SCROLL_WIDTH + 'px';
+    header.appendChild(headerWrap);
+
     var headerContainer = this.headerContainer = document.createElement('div');
     headerContainer.className = 'list-header-sticky-container';
-    headerContainer.style.right = SCROLL_WIDTH + 'px';
     headerWrap.appendChild(headerContainer);
 
-    headerContainer.addEventListener('click', this.onHeaderActivate.bind(this));
-    headerContainer.addEventListener('wheel', this.onHeaderScroll.bind(this));
+    header.addEventListener('click', this.onHeaderActivate.bind(this));
+    header.addEventListener('wheel', this.onHeaderScroll.bind(this));
 
-    this.element.parentNode.insertBefore(headerWrap, this.element);
+    this.element.parentNode.insertBefore(header, this.element);
   };
 
   StickyHeaders.prototype.onHeaderActivate = function(ev) {

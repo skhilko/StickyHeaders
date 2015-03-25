@@ -24,10 +24,15 @@
   position: relative;
 }
 
-.list-header-sticky-container {
+.list-header-sticky-wrap {
+  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.list-header-sticky-container {
+
 }
 
 .header.is-stuck {
