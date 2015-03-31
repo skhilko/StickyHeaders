@@ -33,7 +33,7 @@ function StickyHeaders(el, options) {
     this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), (function(header, i) {
         var clientRect = header.getBoundingClientRect();
         var clone = header.cloneNode(true);
-        clone.classList.add('is-stuck');
+        clone.classList.add('stickies-header', 'is-stuck');
         // explicitly define the height for the clone, just in case it was applied on the original element
         // via a selector which is no longer affecting the clone
         //
@@ -57,16 +57,15 @@ function StickyHeaders(el, options) {
 
 StickyHeaders.prototype._createHeaderContainer = function() {
     var header = document.createElement('div');
-    header.className = 'list-header-sticky';
+    header.className = 'stickies-container';
 
     var headerWrap = document.createElement('div');
-    headerWrap.className = 'list-header-sticky-wrap';
+    headerWrap.className = 'stickies-container-inner';
     headerWrap.style.right = SCROLL_WIDTH + 'px';
     headerWrap.style.height = this.headerContainerHeight + 'px';
     header.appendChild(headerWrap);
 
     var headerContainer = this.headerContainer = document.createElement('div');
-    headerContainer.className = 'list-header-sticky-container';
     headerWrap.appendChild(headerContainer);
 
     header.addEventListener('click', this.onHeaderActivate.bind(this));
