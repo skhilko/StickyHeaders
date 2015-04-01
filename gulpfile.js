@@ -1,10 +1,17 @@
 /*global -$ */
 'use strict';
 
+var DIR_BUILD_BASE = 'dist/';
+var DIR_BUILD_SCRIPTS = DIR_BUILD_BASE + 'scripts/';
+var DIR_BUILD_STYLES = DIR_BUILD_BASE + 'styles/';
+
+
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+
+
 
 function processStyles (src) {
     return function () {
@@ -62,15 +69,6 @@ gulp.task('html', ['styles'], function() {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('extras', function() {
-    return gulp.src([
-        'demo/*.*',
-        '!demo/*.html'
-    ], {
-        dot: true
-    }).pipe(gulp.dest('dist'));
-});
-
 gulp.task('clean', require('del').bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', ['styles', 'styles-demo'], function() {
@@ -100,8 +98,53 @@ gulp.task('serve', ['styles', 'styles-demo'], function() {
         ], ['styles-demo']);
 });
 
-gulp.task('build', ['jshint', 'styles', 'extras'], function() {
-    return gulp.src('dist/**/*').pipe(plugins.size({
+
+gulp.task('build:vanilla', ['jshint'], function() {
+
+    return gulp.src('src/scripts/main.js')
+        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.header(';(function(window, document, undefined) {'))
+        .pipe(plugins.footer('})(window, window.document);'))
+        .pipe(plugins.rename({ basename: 'stickies' }))
+        .pipe(plugins.size({ showFiles: true }))
+        .pipe(gulp.dest(DIR_BUILD_SCRIPTS))
+        .pipe(plugins.uglify())
+        .pipe(plugins.rename({ extname: '.min.js' }))
+        .pipe(plugins.size({ showFiles: true }))
+        .pipe(plugins.sourcemaps.write('../maps'))
+        .pipe(gulp.dest(DIR_BUILD_SCRIPTS));
+
+});
+
+gulp.task('build:jquery', ['jshint'], function() {
+
+    return gulp.src(['src/scripts/main.js', 'src/scripts/jquery-plugin.js'])
+        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.concat('stickies.jquery.js'))
+        .pipe(plugins.header(';(function($, window, document, undefined) {'))
+        .pipe(plugins.footer('})(jQuery, window, window.document);'))
+        .pipe(plugins.size({ showFiles: true }))
+        .pipe(gulp.dest(DIR_BUILD_SCRIPTS))
+        .pipe(plugins.uglify())
+        .pipe(plugins.rename({ extname: '.min.js' }))
+        .pipe(plugins.size({ showFiles: true }))
+        .pipe(plugins.sourcemaps.write('../maps'))
+        .pipe(gulp.dest(DIR_BUILD_SCRIPTS));
+});
+
+gulp.task('build:styles', ['styles'], function() {
+
+    return gulp.src(['.tmp/styles/main.css'])
+        .pipe(plugins.rename({ basename: 'stickies' }))
+        .pipe(gulp.dest(DIR_BUILD_STYLES))
+        .pipe(plugins.csso())
+        .pipe(plugins.rename({ extname: '.min.css' }))
+        .pipe(gulp.dest(DIR_BUILD_STYLES));
+});
+
+gulp.task('build', ['build:vanilla', 'build:jquery', 'build:styles'], function() {
+
+    return gulp.src(DIR_BUILD_BASE + '**/*').pipe(plugins.size({
         title: 'build',
         gzip: true
     }));
