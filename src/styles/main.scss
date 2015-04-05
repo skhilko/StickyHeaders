@@ -1,9 +1,9 @@
-.stickies-container {
+.sticky-container {
   position: relative;
 }
 
 
-  .stickies-container-inner {
+  .sticky-container-inner {
     overflow: hidden;
     position: absolute;
     // compensate list's border
@@ -13,7 +13,7 @@
   }
 
 
-.stickies-header.is-stuck {
+.sticky-header.is-stuck {
   box-sizing: border-box;
   cursor: pointer;
 }
