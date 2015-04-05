@@ -108,14 +108,14 @@ StickyHeaders.prototype.updateHeaders = function() {
 
     this.headers.forEach(function(header) {
         if (!header.el.parentNode) {
-            if (header.top <= scrollTop) {
+            if (header.top < scrollTop) {
                 this.headerContainer.appendChild(header.el);
-                this.stuckHeadersHeight -= header.height;
+                this.stuckHeadersHeight += header.height;
             }
         } else {
             if (header.top >= scrollTop) {
                 this.headerContainer.removeChild(header.el);
-                this.stuckHeadersHeight += header.height;
+                this.stuckHeadersHeight -= header.height;
             }
         }
 
@@ -128,7 +128,7 @@ StickyHeaders.prototype.updateHeaders = function() {
         }
     }, this);
 
-    shiftAmount += this.stuckHeadersHeight + this.headerContainerHeight;
+    shiftAmount += this.headerContainerHeight - this.stuckHeadersHeight;
 
     requestAnimationFrame(function(containerOffset) {
         this.headerContainer.style.transform = 'translateY(' + containerOffset + 'px)';
@@ -154,5 +154,5 @@ StickyHeaders.prototype.onHeaderScroll = function(ev) {
 };
 
 StickyHeaders.prototype.isWithinHeaderContainer = function(header, scrollTop) {
-    return header.top > scrollTop && header.top <= this.headerContainerHeight + scrollTop;
+    return header.top >= scrollTop && header.top <= this.headerContainerHeight + scrollTop;
 };
