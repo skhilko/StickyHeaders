@@ -94,14 +94,7 @@ StickyHeaders.prototype.onHeaderActivate = function(ev) {
     if (ev.target.classList.contains('is-stuck')) {
         var index = parseInt(ev.target.dataset.index, 10);
         var targetHeader = this.headers[index];
-        var scrollOffset = 0;
-        for (var i = 0; i <= index; i++) {
-            scrollOffset += this.headers[i].height;
-        }
-
-        // Scrollable area is reduces by the height of stuck headers.
-        // Need to account for that when jumping to the new position.
-        this.element.scrollTop = targetHeader.bottom - scrollOffset;
+        this.element.scrollTop = targetHeader.top;
     }
 };
 
