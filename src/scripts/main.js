@@ -112,7 +112,7 @@ StickyHeaders.prototype.updateHeaders = function() {
                 this.headerContainer.appendChild(header.el);
                 this.stuckHeadersHeight -= header.height;
             }
-        } else if (header.el.parentNode) {
+        } else {
             if (header.top >= scrollTop) {
                 this.headerContainer.removeChild(header.el);
                 this.stuckHeadersHeight += header.height;
