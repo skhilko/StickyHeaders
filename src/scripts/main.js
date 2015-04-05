@@ -28,12 +28,14 @@ function StickyHeaders(el, options) {
     this.stuckHeadersHeight = 0;
     this._updating = false;
 
-    var listOffset = el.getBoundingClientRect().top;
+    this._readListStyles();
 
     // this.headers contains clone elements references and cached dimensions for faster scroll handling
-    this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), (function(header, i) {
+    this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), function(header, i) {
         var clientRect = header.getBoundingClientRect();
         var clone = header.cloneNode(true);
+        var listTop = this._listStyles.top;
+
         clone.classList.add('sticky-header', 'is-stuck');
         // explicitly define the height for the clone, just in case it was applied on the original element
         // via a selector which is no longer affecting the clone
@@ -44,25 +46,38 @@ function StickyHeaders(el, options) {
 
         clone.dataset.index = i;
         return {
-            top: clientRect.top - listOffset,
-            bottom: clientRect.bottom - listOffset,
+            top: clientRect.top - listTop,
+            bottom: clientRect.bottom - listTop,
             height: clientRect.height,
             el: clone
         };
-    }).bind(this));
+    }.bind(this));
 
     this._createHeaderContainer();
 
     el.addEventListener('scroll', this.onScroll.bind(this));
 }
 
+StickyHeaders.prototype._readListStyles = function() {
+    var element  = this.element;
+    this._listStyles = {
+        top: element.getBoundingClientRect().top,
+        borderTopWidth: element.clientTop,
+        borderLeftWidth: element.clientLeft
+    };
+
+};
+
 StickyHeaders.prototype._createHeaderContainer = function() {
     var header = document.createElement('div');
     header.className = 'sticky-container';
 
     var headerWrap = document.createElement('div');
+    var listBorderLeftWidth = this._listStyles.borderLeftWidth;
     headerWrap.className = 'sticky-container-inner';
-    headerWrap.style.right = SCROLL_WIDTH + 'px';
+    headerWrap.style.top = this._listStyles.borderTopWidth + 'px';
+    headerWrap.style.left = listBorderLeftWidth + 'px';
+    headerWrap.style.right = (SCROLL_WIDTH + listBorderLeftWidth) + 'px';
     headerWrap.style.height = this.headerContainerHeight + 'px';
     header.appendChild(headerWrap);
 
@@ -103,7 +118,7 @@ StickyHeaders.prototype._requestUpdate = function() {
 };
 
 StickyHeaders.prototype.updateHeaders = function() {
-    var scrollTop = this._latestKnownScrollTop;
+    var scrollTop = this._latestKnownScrollTop + this._listStyles.borderTopWidth;
     var shiftAmount = 0;
 
     this.headers.forEach(function(header) {
