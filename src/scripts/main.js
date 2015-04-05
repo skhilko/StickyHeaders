@@ -33,21 +33,18 @@ function StickyHeaders(el, options) {
     // this.headers contains clone elements references and cached dimensions for faster scroll handling
     this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), function(header, i) {
         var clientRect = header.getBoundingClientRect();
-        var clone = header.cloneNode(true);
-        var listTop = this._listStyles.top;
 
+        var clone = header.cloneNode(true);
         clone.classList.add('sticky-header', 'is-stuck');
         // explicitly define the height for the clone, just in case it was applied on the original element
         // via a selector which is no longer affecting the clone
-        //
         clone.style.height = clientRect.height + 'px';
         // TODO all clones must be of equal height
         this.headerContainerHeight = clientRect.height;
 
         clone.dataset.index = i;
         return {
-            top: clientRect.top - listTop,
-            bottom: clientRect.bottom - listTop,
+            top: clientRect.top - this._listStyles.top,
             height: clientRect.height,
             el: clone
         };
