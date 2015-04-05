@@ -26,6 +26,7 @@ function StickyHeaders(el, options) {
     this.element = el;
     this.options = options;
     this.stuckHeadersHeight = 0;
+    this._updating = false;
 
     var listOffset = el.getBoundingClientRect().top;
 
@@ -90,7 +91,19 @@ StickyHeaders.prototype.onHeaderActivate = function(ev) {
 };
 
 StickyHeaders.prototype.onScroll = function() {
-    var scrollTop = this.element.scrollTop;
+    this._latestKnownScrollTop =  this.element.scrollTop;
+    this._requestUpdate();
+};
+
+StickyHeaders.prototype._requestUpdate = function() {
+    if(!this._updating) {
+        setTimeout(this.updateHeaders.bind(this), 0);
+        this._updating = true;
+    }
+};
+
+StickyHeaders.prototype.updateHeaders = function() {
+    var scrollTop = this._latestKnownScrollTop;
     var shiftAmount = 0;
 
     this.headers.forEach(function(header) {
@@ -117,7 +130,10 @@ StickyHeaders.prototype.onScroll = function() {
 
     shiftAmount += this.stuckHeadersHeight + this.headerContainerHeight;
 
-    this.headerContainer.style.transform = 'translateY(' + shiftAmount + 'px)';
+    requestAnimationFrame(function(containerOffset) {
+        this.headerContainer.style.transform = 'translateY(' + containerOffset + 'px)';
+        this._updating = false;
+    }.bind(this, shiftAmount));
 };
 
 StickyHeaders.prototype.onHeaderScroll = function(ev) {
