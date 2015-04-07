@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Stickyheaders by skhilko</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Stickyheaders</h1>
+      <h2 class="project-tagline">A JS library which enables sticky section headers in a scrollable list view.</h2>
+      <a href="https://github.com/skhilko/StickyHeaders" class="btn">View on GitHub</a>
+      <a href="https://github.com/skhilko/StickyHeaders/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/skhilko/StickyHeaders/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="stickyheaders" class="anchor" href="#stickyheaders" aria-hidden="true"><span class="octicon octicon-link"></span></a>StickyHeaders</h1>
+
+<p>A JS library which enables sticky section headers in a scrollable list view.</p>
+
+<h2>
+<a id="browser-compatibility" class="anchor" href="#browser-compatibility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser Compatibility</h2>
+
+<ul>
+<li>IE 10+</li>
+<li>Firefox 35+</li>
+<li>Chrome 36+</li>
+<li>Opera 27+</li>
+</ul>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>StickyHeaders has a single instance option to pass during initialization.</p>
+
+<h3>
+<a id="instance-options" class="anchor" href="#instance-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Options</h3>
+
+<ul>
+<li>
+<code>headerSelector</code> (string) <em>required</em> - a selector targeting header elements within the list</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Using StickyHeaders is really simple. It has a pure JavaScript API, plus an optional jQuery plugin.</p>
+
+<h3>
+<a id="vanilla-js" class="anchor" href="#vanilla-js" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vanilla JS</h3>
+
+<p>Include the widget on the page.</p>
+
+<div class="highlight highlight-html"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+  &lt;<span class="pl-ent">head</span>&gt;
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>dist/scripts/stickyheaders.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+    &lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>dist/styles/stickyheaders.min.css<span class="pl-pds">"</span></span>&gt;
+  &lt;/<span class="pl-ent">head</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<p>Initialize the widget on the list element.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> list <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StickyHeaders</span>(<span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>movies<span class="pl-pds">'</span></span>), {
+  headerSelector<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>.movies-genre<span class="pl-pds">'</span></span>
+});</pre></div>
+
+<h3>
+<a id="jquery" class="anchor" href="#jquery" aria-hidden="true"><span class="octicon octicon-link"></span></a>jQuery</h3>
+
+<p>Include the widget on the page.</p>
+
+<div class="highlight highlight-html"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+  &lt;<span class="pl-ent">head</span>&gt;
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>dist/scripts/stickyheaders.jquery.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+    &lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>stylesheet<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>dist/styles/stickyheaders.min.css<span class="pl-pds">"</span></span>&gt;
+  &lt;/<span class="pl-ent">head</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<p>Initialize the widget on the list element.</p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s"><span class="pl-pds">'</span>movies<span class="pl-pds">'</span></span>).stickyHeaders({
+  headerSelector<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>.movies-genre<span class="pl-pds">'</span></span>
+});</pre></div>
+
+<h2>
+<a id="build" class="anchor" href="#build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build</h2>
+
+<p>StickyHeaders uses <code>npm</code>, <code>bower</code> and <code>gulp</code>.  </p>
+
+<p>Initialize the dependencies:</p>
+
+<div class="highlight highlight-shell"><pre>npm install
+bower install</pre></div>
+
+<p>Build the project:</p>
+
+<div class="highlight highlight-shell"><pre>gulp</pre></div>
+
+<p>The results will appear in the <code>dist</code> directory.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/skhilko/StickyHeaders">Stickyheaders</a> is maintained by <a href="https://github.com/skhilko">skhilko</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-46567424-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
+
