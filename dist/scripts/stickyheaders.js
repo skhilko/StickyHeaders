@@ -26,42 +26,55 @@ function StickyHeaders(el, options) {
     this.element = el;
     this.options = options;
     this.stuckHeadersHeight = 0;
+    this._updating = false;
 
-    var listOffset = el.getBoundingClientRect().top;
+    this._readListStyles();
 
     // this.headers contains clone elements references and cached dimensions for faster scroll handling
-    this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), (function(header, i) {
+    this.headers = Array.prototype.map.call(el.querySelectorAll(this.options.headerSelector), function(header, i) {
         var clientRect = header.getBoundingClientRect();
+
         var clone = header.cloneNode(true);
-        clone.classList.add('stickies-header', 'is-stuck');
+        clone.classList.add('sticky-header', 'is-stuck');
         // explicitly define the height for the clone, just in case it was applied on the original element
         // via a selector which is no longer affecting the clone
-        //
         clone.style.height = clientRect.height + 'px';
         // TODO all clones must be of equal height
         this.headerContainerHeight = clientRect.height;
 
         clone.dataset.index = i;
         return {
-            top: clientRect.top - listOffset,
-            bottom: clientRect.bottom - listOffset,
+            top: clientRect.top - this._listStyles.top,
             height: clientRect.height,
             el: clone
         };
-    }).bind(this));
+    }.bind(this));
 
     this._createHeaderContainer();
 
     el.addEventListener('scroll', this.onScroll.bind(this));
 }
 
+StickyHeaders.prototype._readListStyles = function() {
+    var element  = this.element;
+    this._listStyles = {
+        top: element.getBoundingClientRect().top,
+        borderTopWidth: element.clientTop,
+        borderLeftWidth: element.clientLeft
+    };
+
+};
+
 StickyHeaders.prototype._createHeaderContainer = function() {
     var header = document.createElement('div');
-    header.className = 'stickies-container';
+    header.className = 'sticky-container';
 
     var headerWrap = document.createElement('div');
-    headerWrap.className = 'stickies-container-inner';
-    headerWrap.style.right = SCROLL_WIDTH + 'px';
+    var listBorderLeftWidth = this._listStyles.borderLeftWidth;
+    headerWrap.className = 'sticky-container-inner';
+    headerWrap.style.top = this._listStyles.borderTopWidth + 'px';
+    headerWrap.style.left = listBorderLeftWidth + 'px';
+    headerWrap.style.right = (SCROLL_WIDTH + listBorderLeftWidth) + 'px';
     headerWrap.style.height = this.headerContainerHeight + 'px';
     header.appendChild(headerWrap);
 
@@ -78,31 +91,36 @@ StickyHeaders.prototype.onHeaderActivate = function(ev) {
     if (ev.target.classList.contains('is-stuck')) {
         var index = parseInt(ev.target.dataset.index, 10);
         var targetHeader = this.headers[index];
-        var scrollOffset = 0;
-        for (var i = 0; i <= index; i++) {
-            scrollOffset += this.headers[i].height;
-        }
-
-        // Scrollable area is reduces by the height of stuck headers.
-        // Need to account for that when jumping to the new position.
-        this.element.scrollTop = targetHeader.bottom - scrollOffset;
+        this.element.scrollTop = targetHeader.top;
     }
 };
 
 StickyHeaders.prototype.onScroll = function() {
-    var scrollTop = this.element.scrollTop;
+    this._latestKnownScrollTop =  this.element.scrollTop;
+    this._requestUpdate();
+};
+
+StickyHeaders.prototype._requestUpdate = function() {
+    if(!this._updating) {
+        setTimeout(this.updateHeaders.bind(this), 0);
+        this._updating = true;
+    }
+};
+
+StickyHeaders.prototype.updateHeaders = function() {
+    var scrollTop = this._latestKnownScrollTop + this._listStyles.borderTopWidth;
     var shiftAmount = 0;
 
     this.headers.forEach(function(header) {
         if (!header.el.parentNode) {
-            if (header.top <= scrollTop) {
+            if (header.top < scrollTop) {
                 this.headerContainer.appendChild(header.el);
-                this.stuckHeadersHeight -= header.height;
+                this.stuckHeadersHeight += header.height;
             }
-        } else if (header.el.parentNode) {
+        } else {
             if (header.top >= scrollTop) {
                 this.headerContainer.removeChild(header.el);
-                this.stuckHeadersHeight += header.height;
+                this.stuckHeadersHeight -= header.height;
             }
         }
 
@@ -115,9 +133,12 @@ StickyHeaders.prototype.onScroll = function() {
         }
     }, this);
 
-    shiftAmount += this.stuckHeadersHeight + this.headerContainerHeight;
+    shiftAmount += this.headerContainerHeight - this.stuckHeadersHeight;
 
-    this.headerContainer.style.transform = 'translateY(' + shiftAmount + 'px)';
+    requestAnimationFrame(function(containerOffset) {
+        this.headerContainer.style.transform = 'translateY(' + containerOffset + 'px)';
+        this._updating = false;
+    }.bind(this, shiftAmount));
 };
 
 StickyHeaders.prototype.onHeaderScroll = function(ev) {
@@ -138,6 +159,6 @@ StickyHeaders.prototype.onHeaderScroll = function(ev) {
 };
 
 StickyHeaders.prototype.isWithinHeaderContainer = function(header, scrollTop) {
-    return header.top > scrollTop && header.top <= this.headerContainerHeight + scrollTop;
+    return header.top >= scrollTop && header.top <= this.headerContainerHeight + scrollTop;
 };
 })(window, window.document);

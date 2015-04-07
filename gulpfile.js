@@ -4,6 +4,7 @@
 var DIR_BUILD_BASE = 'dist/';
 var DIR_BUILD_SCRIPTS = DIR_BUILD_BASE + 'scripts/';
 var DIR_BUILD_STYLES = DIR_BUILD_BASE + 'styles/';
+var BASE_NAME = 'stickyheaders';
 
 
 var gulp = require('gulp');
@@ -105,7 +106,7 @@ gulp.task('build:vanilla', ['jshint'], function() {
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.header(';(function(window, document, undefined) {'))
         .pipe(plugins.footer('})(window, window.document);'))
-        .pipe(plugins.rename({ basename: 'stickies' }))
+        .pipe(plugins.rename({ basename: BASE_NAME }))
         .pipe(plugins.size({ showFiles: true }))
         .pipe(gulp.dest(DIR_BUILD_SCRIPTS))
         .pipe(plugins.uglify())
@@ -120,7 +121,7 @@ gulp.task('build:jquery', ['jshint'], function() {
 
     return gulp.src(['src/scripts/main.js', 'src/scripts/jquery-plugin.js'])
         .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.concat('stickies.jquery.js'))
+        .pipe(plugins.concat(BASE_NAME + '.jquery.js'))
         .pipe(plugins.header(';(function($, window, document, undefined) {'))
         .pipe(plugins.footer('})(jQuery, window, window.document);'))
         .pipe(plugins.size({ showFiles: true }))
@@ -135,7 +136,7 @@ gulp.task('build:jquery', ['jshint'], function() {
 gulp.task('build:styles', ['styles'], function() {
 
     return gulp.src(['.tmp/styles/main.css'])
-        .pipe(plugins.rename({ basename: 'stickies' }))
+        .pipe(plugins.rename({ basename: BASE_NAME }))
         .pipe(gulp.dest(DIR_BUILD_STYLES))
         .pipe(plugins.csso())
         .pipe(plugins.rename({ extname: '.min.css' }))

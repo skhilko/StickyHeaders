@@ -1,4 +1,4 @@
-var pluginName = 'StickyHeaders';
+var pluginName = 'stickyHeaders';
 
 function Plugin(element, options) {
     this.element = element;
