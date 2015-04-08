@@ -243,3 +243,48 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+
+
+/* List View */
+.list-view {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  height: 500px;
+  border: 1px solid hsl(0, 0%, 80%);
+}
+
+
+  .list-view-header,
+  .list-view-item {
+    padding: 1rem 1.5rem;
+  }
+
+
+  .list-view-header {
+    border-bottom: 1px solid hsl(0, 0%, 80%);
+    background-color: hsl(0, 0%, 87%);
+    transition: background 300ms;
+  }
+
+
+  .list-view-header.is-stuck {
+    list-style: none;
+  }
+
+
+  .list-view-header.is-stuck:hover {
+    background: hsl(0, 0%, 80%);
+  }
+
+
+  .list-view-item {
+    border-bottom: 1px solid hsl(0, 0%, 87%);
+    background-color: hsl(0, 0%, 100%);
+  }
+
+
+  .list-view-item:last-child {
+    border-bottom: none;
+  }
