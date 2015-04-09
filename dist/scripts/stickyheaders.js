@@ -10,6 +10,15 @@ var SCROLL_WIDTH = (function() {
     return scrollbarWidth;
 })();
 
+var STYLE_TRANSFORM = (function getTransitionEndEventName() {
+    var transforms = ['transform', 'webkitTransform'];
+    for (var i = 0; i < transforms.length; i++) {
+        if( document.body.style[transforms[i]] !== undefined ){
+            return transforms[i];
+        }
+    }
+})();
+
 var SCROLL_STEP_DEFAULT = 50;
 var LINE_HEIGHT = 16;
 
@@ -136,7 +145,7 @@ StickyHeaders.prototype.updateHeaders = function() {
     shiftAmount += this.headerContainerHeight - this.stuckHeadersHeight;
 
     requestAnimationFrame(function(containerOffset) {
-        this.headerContainer.style.transform = 'translateY(' + containerOffset + 'px)';
+        this.headerContainer.style[STYLE_TRANSFORM] = 'translateY(' + containerOffset + 'px)';
         this._updating = false;
     }.bind(this, shiftAmount));
 };
