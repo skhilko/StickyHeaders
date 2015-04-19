@@ -7,11 +7,11 @@ function Plugin(element, options) {
 }
 
 Plugin.prototype.init = function() {
-    this.akno = new StickyHeaders(this.element, this.options);
+    this.widget = new StickyHeaders(this.element, this.options);
 };
 
 Plugin.prototype.destroy = function() {
-    this.akno.destroy();
+    this.widget.destroy();
     $.removeData(this.element, 'plugin_' + pluginName);
     this.element = null;
 };
@@ -30,8 +30,8 @@ $.fn[pluginName] = function(options) {
             var instance = $.data(this, dataKey);
             if (instance instanceof Plugin) {
                 // call with the widget instance if not on the plugin
-                if(!$.isFunction(instance[options]) && $.isFunction(instance.akno[options])) {
-                    instance = instance.akno;
+                if(!$.isFunction(instance[options]) && $.isFunction(instance.widget[options])) {
+                    instance = instance.widget;
                 }
                 instance[options].apply(instance, Array.prototype.slice.call(args, 1));
             }
