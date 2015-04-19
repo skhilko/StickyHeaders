@@ -36,6 +36,7 @@ function StickyHeaders(el, options) {
     this.options = options;
     this.stuckHeadersHeight = 0;
     this._updating = false;
+    this._events = [];
 
     this._readListStyles();
 
@@ -61,7 +62,7 @@ function StickyHeaders(el, options) {
 
     this._createHeaderContainer();
 
-    el.addEventListener('scroll', this.onScroll.bind(this));
+    this._on('scroll', this.onScroll);
 }
 
 StickyHeaders.prototype._readListStyles = function() {
@@ -75,7 +76,7 @@ StickyHeaders.prototype._readListStyles = function() {
 };
 
 StickyHeaders.prototype._createHeaderContainer = function() {
-    var header = document.createElement('div');
+    var header = this.header = document.createElement('div');
     header.className = 'sticky-container';
 
     var headerWrap = document.createElement('div');
@@ -165,6 +166,23 @@ StickyHeaders.prototype.onHeaderScroll = function(ev) {
     this.element.scrollTop += scrollDelta;
     // prevent the viewport from scrolling
     ev.preventDefault();
+};
+
+StickyHeaders.prototype._on = function(event, handler) {
+    handler = handler.bind(this);
+    this.element.addEventListener(event, handler);
+    this._events.push({
+        el: this.element,
+        ev: event,
+        handler: handler
+    });
+};
+
+StickyHeaders.prototype.destroy = function() {
+    this._events.forEach(function(eventData) {
+        eventData.el.removeEventListener(eventData.ev, eventData.handler);
+    });
+    this.element.parentNode.removeChild(this.header);
 };
 
 StickyHeaders.prototype.isWithinHeaderContainer = function(header, scrollTop) {
