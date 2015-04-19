@@ -1,17 +1,24 @@
-/*global -$ */
 'use strict';
 
-var DIR_BUILD_BASE = 'dist/';
-var DIR_BUILD_SCRIPTS = DIR_BUILD_BASE + 'scripts/';
-var DIR_BUILD_STYLES = DIR_BUILD_BASE + 'styles/';
-var BASE_NAME = 'stickyheaders';
 
-
+var project = require('./package.json');
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
+
+var DIR_BUILD_BASE = 'dist/';
+var DIR_BUILD_SCRIPTS = DIR_BUILD_BASE + 'scripts/';
+var DIR_BUILD_STYLES = DIR_BUILD_BASE + 'styles/';
+var UMD_CONFIG = {
+        namespace: function() {
+            return project.title;
+        },
+        exports: function() {
+            return project.title;
+        }
+    };
 
 
 function processStyles (src) {
@@ -104,9 +111,10 @@ gulp.task('build:vanilla', ['jshint'], function() {
 
     return gulp.src('src/scripts/main.js')
         .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.header(';(function(window, document, undefined) {'))
-        .pipe(plugins.footer('})(window, window.document);'))
-        .pipe(plugins.rename({ basename: BASE_NAME }))
+        .pipe(plugins.umd(UMD_CONFIG))
+        .pipe(plugins.header(';(function(document, undefined) {\n'))
+        .pipe(plugins.footer('})(window.document);'))
+        .pipe(plugins.rename({ basename: project.name }))
         .pipe(plugins.size({ showFiles: true }))
         .pipe(gulp.dest(DIR_BUILD_SCRIPTS))
         .pipe(plugins.uglify())
@@ -121,9 +129,10 @@ gulp.task('build:jquery', ['jshint'], function() {
 
     return gulp.src(['src/scripts/main.js', 'src/scripts/jquery-plugin.js'])
         .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.concat(BASE_NAME + '.jquery.js'))
-        .pipe(plugins.header(';(function($, window, document, undefined) {'))
-        .pipe(plugins.footer('})(jQuery, window, window.document);'))
+        .pipe(plugins.concat(project.name + '.jquery.js'))
+        .pipe(plugins.umd(UMD_CONFIG))
+        .pipe(plugins.header(';(function($, document, undefined) {\n'))
+        .pipe(plugins.footer('})(jQuery, window.document);'))
         .pipe(plugins.size({ showFiles: true }))
         .pipe(gulp.dest(DIR_BUILD_SCRIPTS))
         .pipe(plugins.uglify())
@@ -136,7 +145,7 @@ gulp.task('build:jquery', ['jshint'], function() {
 gulp.task('build:styles', ['styles'], function() {
 
     return gulp.src(['.tmp/styles/main.css'])
-        .pipe(plugins.rename({ basename: BASE_NAME }))
+        .pipe(plugins.rename({ basename: project.name }))
         .pipe(gulp.dest(DIR_BUILD_STYLES))
         .pipe(plugins.csso())
         .pipe(plugins.rename({ extname: '.min.css' }))

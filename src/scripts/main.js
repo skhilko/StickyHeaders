@@ -170,5 +170,3 @@ StickyHeaders.prototype.onHeaderScroll = function(ev) {
 StickyHeaders.prototype.isWithinHeaderContainer = function(header, scrollTop) {
     return header.top >= scrollTop && header.top <= this.headerContainerHeight + scrollTop;
 };
-
-window.StickyHeaders = StickyHeaders;
