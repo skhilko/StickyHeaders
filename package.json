@@ -2,7 +2,7 @@
   "name": "stickyheaders",
   "title": "StickyHeaders",
   "description": "JavaScript library which enables sticky section headers in a scrollable list view",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "dist/scripts/stickyheaders.js",
   "homepage": "http://skhilko.github.io/StickyHeaders",
   "repository": {
@@ -12,7 +12,7 @@
   "author": {
     "name": "Siarhei Khilko",
     "email": "skhiko@gmail.com",
-    "url" : "https://github.com/skhilko"
+    "url": "https://github.com/skhilko"
   },
   "devDependencies": {
     "autoprefixer-core": "^4.0.2",
