@@ -1,7 +1,30 @@
 {
-  "name": "stickies",
-  "private": true,
+  "name": "stickyheaders",
   "devDependencies": {
     "normalize.css": "~3.0.2"
-  }
+  },
+  "version": "1.0.0",
+  "homepage": "http://skhilko.github.io/StickyHeaders/",
+  "description": "JavaScript library which enables sticky section headers in a scrollable list view",
+  "main": "dist/scripts/stickyheaders.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "authors": [
+    {
+      "name": "Siarhei Khilko",
+      "email": "skhilko@gmail.com",
+      "homepage": "https://github.com/skhilko"
+    }
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
