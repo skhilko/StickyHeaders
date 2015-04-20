@@ -1,0 +1,7 @@
+{
+  "name": "stickies",
+  "private": true,
+  "devDependencies": {
+    "normalize.css": "~3.0.2"
+  }
+}
