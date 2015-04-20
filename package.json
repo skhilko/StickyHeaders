@@ -2,7 +2,7 @@
   "name": "stickyheaders",
   "title": "StickyHeaders",
   "description": "JavaScript library which enables sticky section headers in a scrollable list view",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/scripts/stickyheaders.js",
   "homepage": "http://skhilko.github.io/StickyHeaders",
   "repository": {
