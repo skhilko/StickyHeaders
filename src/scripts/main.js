@@ -66,7 +66,7 @@ function StickyHeaders(el, options) {
 }
 
 StickyHeaders.prototype._readListStyles = function() {
-    var element  = this.element;
+    var element = this.element;
     this._listStyles = {
         top: element.getBoundingClientRect().top,
         borderTopWidth: element.clientTop,
@@ -106,7 +106,7 @@ StickyHeaders.prototype.onHeaderActivate = function(ev) {
 };
 
 StickyHeaders.prototype.onScroll = function() {
-    this._latestKnownScrollTop =  this.element.scrollTop;
+    this._latestKnownScrollTop = this.element.scrollTop;
     this._requestUpdate();
 };
 
