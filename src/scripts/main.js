@@ -106,7 +106,6 @@ StickyHeaders.prototype.onHeaderActivate = function(ev) {
 };
 
 StickyHeaders.prototype.onScroll = function() {
-    this._latestKnownScrollTop = this.element.scrollTop;
     this._requestUpdate();
 };
 
@@ -118,7 +117,7 @@ StickyHeaders.prototype._requestUpdate = function() {
 };
 
 StickyHeaders.prototype.updateHeaders = function() {
-    var scrollTop = this._latestKnownScrollTop + this._listStyles.borderTopWidth;
+    var scrollTop = this.element.scrollTop + this._listStyles.borderTopWidth;
     var shiftAmount = 0;
 
     this.headers.forEach(function(header) {
