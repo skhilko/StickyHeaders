@@ -1,0 +1,14 @@
+{
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    // Strict mode
+    "strict": [2, "single"],
+
+    // Code style
+    "indent": [2, 4],
+    "quotes": [2, "double"],
+    "no-underscore-dangle": 0
+  }
+}
