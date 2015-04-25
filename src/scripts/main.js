@@ -183,6 +183,11 @@ StickyHeaders.prototype.destroy = function() {
         eventData.el.removeEventListener(eventData.ev, eventData.handler);
     });
     this.element.parentNode.removeChild(this.header);
+
+    this.element = null;
+    this.header = null;
+    this.headerContainer = null;
+    this.headers = null;
 };
 
 StickyHeaders.prototype.isWithinHeaderContainer = function(header, scrollTop) {
